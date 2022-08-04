@@ -6,9 +6,9 @@ export const switchDarkMode = (data) => {
     }
 }
 
-export const addPost = (data) => {
+export const updatePostList = (data) => {
     return {
-        type: "postList/addPost",
+        type: "postList/updatePostList",
         payload: data,
     }
 }

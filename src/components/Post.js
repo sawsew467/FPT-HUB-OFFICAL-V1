@@ -1,8 +1,12 @@
 import { React, useState } from "react";
 import { Link } from "react-router-dom";
 import InteractionBar from "./InteractionBar";
-import { darkmodeSelector, postsSelector, usersSelector } from "../redux/selectors";
-import { useSelector } from "react-redux";
+import {
+  postsSelector,
+  usersSelector,
+} from "../redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePostList } from "../redux/actions";
 
 function Post(props) {
   const currentId = JSON.parse(window.localStorage.getItem("currentUser")).id;
@@ -15,7 +19,19 @@ function Post(props) {
   const isSeed = currentUser[0].seedList.includes(info.id);
   const isFlag = currentUser[0].flagList.includes(info.id);
   const isBookmark = currentUser[0].bookmarkList.includes(info.id);
-  // console.log(info.counterFlag, " ", info.counterFlag);
+
+  const [isShow, setIsShow] = useState(false);
+  const dispatch = useDispatch;
+  const deletePost = () => {
+    let newPostList = [];
+    for (let i = 0; i < postList.length; i++) {
+      if (postList[i].id !== info.id) {
+        newPostList.push(postList[i]);
+      }
+    }
+    console.log(newPostList);
+    dispatch(updatePostList(newPostList));
+  };
   return (
     <>
       <div className="w-full flex flex-col sm:gap-3 gap-2 bg-white dark:bg-[#242526] dark:text-white700 sm:rounded-xl sm:drop-shadow-xl sm:p-5 p-2 min-h-[5rem] sm:mb-7 mb-2">
@@ -54,7 +70,29 @@ function Post(props) {
               <p className="text-lg text-red">{info.counterFlag}</p>
               <p className="text-lg text-red sm:block hidden">Cờ</p>
             </div>
-            <i className="fa-solid fa-ellipsis"></i>
+            <div
+              className="rounded-full hover:bg-slate-200 w-8 h-8 flex justify-center items-center cursor-pointer"
+              onClick={() => setIsShow(!isShow)}
+            >
+              <i className="fa-solid fa-ellipsis"></i>
+            </div>
+            {isShow && (
+              <div className="flex flex-col bg-white drop-shadow-lg rounded-lg dark:bg-[#242526] absolute right-4 top-12">
+                <p
+                  className="text-lg px-4 py-2 rounded-tl-lg rounded-tr-lg dark:text-white700 hover:bg-slate-200 cursor-pointer"
+                  onClick={deletePost}
+                  // onClick={()}
+                >
+                  Xóa bài viết
+                </p>
+                <p className="text-lg px-4 py-2 dark:text-white700 hover:bg-slate-200 cursor-pointer">
+                  Ẩn bài viết
+                </p>
+                <p className="text-lg px-4 py-2 rounded-bl-lg rounded-br-lg dark:text-white700 hover:bg-slate-200 cursor-pointer">
+                  Báo cáo bài viết
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <div className="text-lg">{info.content}</div>

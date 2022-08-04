@@ -16,10 +16,10 @@ const rootReducer = (state = initState, action) => {
         darkmode: action.payload,
       };
 
-    case "postList/addPost":
+    case "postList/updatePostList":
       return {
         ...state,
-        postList: [...state.postList, action.payload.post],
+        postList: action.payload,
       };
 
     case "postList/addSeed":

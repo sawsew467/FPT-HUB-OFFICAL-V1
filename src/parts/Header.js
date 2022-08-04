@@ -20,12 +20,12 @@ function Header(props) {
     const words = name.split(" ");
     return words[words.length - 2] + " " + words[words.length - 1];
   };
-  console.log(currentUser);
+  // console.log(currentUser);
   const [showDropdown, setShowDropdown] = useState(false);
   const myRef = useRef(null);
   useClickOutside(myRef, () => setShowDropdown(false));
-  const [isDarkmode, setIsDarkmode] = useState(false);
-  const darkmode = useSelector(darkmodeSelector);
+  const [isDarkmode, setIsDarkmode] = useState(useSelector(darkmodeSelector));
+  // const darkmode = useSelector(darkmodeSelector);
   const dispatch = useDispatch();
   const tmp = isDarkmode;
   const handleDarkmode = () => {

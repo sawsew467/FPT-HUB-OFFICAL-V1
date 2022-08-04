@@ -20,6 +20,7 @@ function Profile(props) {
   const currentId = JSON.parse(window.localStorage.getItem("currentUser")).id;
   const userList = useSelector(usersSelector);
   const currentUser = userList.filter(user => user.id === tartgetId);
+  // console.log("userList: ", userList);
   return (
     <>
       <div className={props.mode === true ? "dark" : "light"}>

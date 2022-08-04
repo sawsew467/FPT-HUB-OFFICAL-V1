@@ -1,19 +1,23 @@
 import React, { useState, useRef } from "react";
-import times from "../assets/images/times.svg";
 import plus from "../assets/images/plus.svg";
 import smile from "../assets/images/smile.svg";
 import file from "../assets/images/file.svg";
 import image from "../assets/images/image.svg";
 import useClickOutside from "../customHooks/useClickedOutside";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import uuid from 'react-uuid'
+import uuid from "react-uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { addPost } from "../redux/actions";
+import { updatePostList } from "../redux/actions";
+import { postsSelector, usersSelector } from "../redux/selectors";
 
 function Poster(props) {
-  const [currentUser, setCurrentUser] = useState(JSON.parse(window.localStorage.getItem('currentUser')));
-  const [posts, setPosts] = useState(JSON.parse(window.localStorage.getItem('posts')));
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(window.localStorage.getItem("currentUser"))
+  );
+  // const [posts, setPosts] = useState(
+  //   JSON.parse(window.localStorage.getItem("posts"))
+  // );
+  const posts = useSelector(postsSelector);
+  const userList = useSelector(usersSelector);
   const [PostData, setPostData] = useState("");
   const [isShow, setIsShow] = useState(true);
   const [ischosen, setIsChosen] = useState(false);
@@ -70,24 +74,20 @@ function Poster(props) {
       counterFlag: 0,
       created: "2022-05-23T04:04:30 -07:00",
       owner: currentUser.id,
-    }
-    const newPosts = [
-      newPost,
-      ...posts,
-    ]
-    window.localStorage.setItem("posts", JSON.stringify(newPosts));
-    dispatch(
-      addPost({
-        post: newPost
-      })
-    )
+    };
+    const newPosts = [...posts, newPost];
+    // window.localStorage.setItem("posts", JSON.stringify(newPosts));
+    // console.log(newPosts);
+    dispatch(updatePostList(newPosts));
     setIsShow(false);
-  }
+    // console.log(props);
+    //
+  };
   return (
     <>
       <div className="bg-[#00000080] fixed top-0 bottom-0 left-0 right-0 flex justify-center items-center z-30">
         <div
-          className="bg-white p-5 sm:rounded-xl sm:min-w-[40rem] flex flex-col relative z-50"
+          className="bg-white dark:bg-[#242526] dark:text-white700 p-5 sm:rounded-xl sm:min-w-[40rem] flex flex-col relative z-50"
           ref={popupRef}
         >
           <div
@@ -109,13 +109,13 @@ function Poster(props) {
               <p className="text-lg font-semibold">{currentUser.name}</p>
             </div>
             <textarea
-                type="text"
-                className="w-full text-lg outline-none placeholder:text-slate-900 text-slate-900 border-solid	border-slate-500 dark:border-slate-700"
-                placeholder="Nội dung bài viết..."
-                cols="50"
-                rows="5"
-                onChange={(e) => setText(e.target.value)}
-              ></textarea>
+              type="text"
+              className="dark:bg-[#242526] dark:placeholder:text-white700 dark:text-white700 w-full text-lg outline-none placeholder:text-slate-900 text-slate-900 border-solid	border-slate-500 dark:border-slate-700"
+              placeholder="Nội dung bài viết..."
+              cols="50"
+              rows="5"
+              onChange={(e) => setText(e.target.value)}
+            ></textarea>
             {/* <div className="h-40">
               <CKEditor
                 height="300"
@@ -187,7 +187,9 @@ function Poster(props) {
               <img src={smile} />
             </div>
             <div className="flex justify-between w-full p-5 mt-3 border-[1px] rounded-xl">
-              <p className="text-lg text-gray-500">Thêm vào bài viết</p>
+              <p className="text-lg text-gray-500 dark:text-white700">
+                Thêm vào bài viết
+              </p>
               <div className="flex gap-5">
                 <img src={image} />
                 <img src={file} />
@@ -195,11 +197,14 @@ function Poster(props) {
             </div>
           </div>
           {text !== "" ? (
-            <button className="w-1/2 mx-auto px-3 py-2 bg-blue rounded-xl text-white text-lg hover:scale-105 transition-alldark:text-white700" onClick={handleSubmit}>
+            <button
+              className="w-1/2 mx-auto px-3 py-2 bg-blue rounded-xl text-white text-lg hover:scale-105 transition-alldark:text-white700"
+              onClick={handleSubmit}
+            >
               Đăng bài
             </button>
           ) : (
-            <button className="w-1/2 mx-auto px-3 py-2 bg-blue rounded-xl text-white text-lg hover:scale-105 transition-alldark:text-white700 opacity-50 cursor-not-allowed" >
+            <button className="w-1/2 mx-auto px-3 py-2 bg-blue rounded-xl text-white text-lg hover:scale-105 transition-alldark:text-white700 opacity-50 cursor-not-allowed">
               Đăng bài
             </button>
           )}
